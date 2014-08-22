@@ -5,6 +5,7 @@
 
 static const gchar *FILE_EXTENSION = ".vcf";
 static const gint VCARD_DEFAULT_PREF = 100;
+static const gchar *EVC_PREF = "PREF";
 
 static void emit_header(void)
 {
@@ -71,7 +72,7 @@ static const gchar *attr_type(EVCardAttribute *attr) {
 static gint attr_pref(EVCardAttribute *attr) {
 	GList *params, *i;
 
-	params = e_vcard_attribute_get_param(attr, "PREF");
+	params = e_vcard_attribute_get_param(attr, EVC_PREF);
 
 	i = params;
 	while (i != NULL)

@@ -28,6 +28,14 @@ BAZ = ('BEGIN:VCARD\n'
        'FN:Baz\n'
        'END:VCARD')
 
+QUUX = ('BEGIN:VCARD\n'
+        'VERSION:3.0\n'
+        'EMAIL;PREF=15:quux+15@example.com\n'
+        'EMAIL:quux+100@example.com\n'
+        'EMAIL;PREF=1:quux+1@example.com\n'
+        'FN:Quux\n'
+        'END:VCARD')
+
 
 class ContactQuery(object):
     def __init__(self):
@@ -124,4 +132,13 @@ def test_multiple_email_addresses(contactquery):
     assert sorted(contactquery.search('')) == [
         ('baz@example.com', 'Baz'),
         ('baz@example.org', 'Baz'),
+    ]
+
+
+def test_mail_preference_parameter(contactquery):
+    contactquery.add_contact(QUUX)
+    assert contactquery.search('') == [
+        ('quux+1@example.com', 'Quux'),
+        ('quux+15@example.com', 'Quux'),
+        ('quux+100@example.com', 'Quux'),
     ]

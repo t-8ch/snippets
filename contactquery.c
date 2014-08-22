@@ -4,6 +4,7 @@
 #include <libebook-contacts/libebook-contacts.h>
 
 static const gchar *FILE_EXTENSION = ".vcf";
+static const gint VCARD_DEFAULT_PREF = 100;
 
 static void emit_header(void)
 {
@@ -45,33 +46,75 @@ static void emit_email_name(const gchar *email, const gchar *name)
 	printf("%s\t%s\n", email, name);
 }
 
-static void emit_emails(gpointer data, gpointer user_data)
-{
-	const gchar *search_name, *attr_type, *email;
-	EVCardAttribute *attribute;
+static gint attr_pref(EVCardAttribute *attr) {
+	GList *params, *i;
 
-	search_name = (gchar *) user_data;
-	attribute = (EVCardAttribute *) data;
+	params = e_vcard_attribute_get_param(attr, "PREF");
 
-	attr_type = e_vcard_attribute_get_name(attribute);
+	i = params;
+	while (i != NULL)
+	{
+		GList *next = i->next;
+		gchar *param = i->data;
+		gchar *endptr = NULL;
+		long int pref = strtol(param, &endptr, 10);
 
-	if (!!strcmp(EVC_EMAIL, attr_type))
-		return;
+		if (NULL != param && 0 == *endptr) /* everything valid */
+			return pref;
 
-	email = e_vcard_attribute_get_value(attribute);
+		i = next;
+	}
 
-	if (NULL == email)
-		return;
+	return VCARD_DEFAULT_PREF;
+}
 
-	emit_email_name(email, search_name);
+static gint cmp_attr_pref(gconstpointer a, gconstpointer b) {
+	EVCardAttribute *one, *two;
+	int pref_one, pref_two;
+
+	one = (EVCardAttribute *)a;
+	two = (EVCardAttribute *)b;
+
+	pref_one = attr_pref(one);
+	pref_two = attr_pref(two);
+
+	return pref_one - pref_two;
 }
 
 static void emit_contact(EVCard *card)
 {
 	const gchar *name;
+	GList *attributes, *i;
 
 	name = get_attr(card, EVC_FN);
-	g_list_foreach(e_vcard_get_attributes(card), emit_emails, (gpointer) name);
+	attributes = e_vcard_get_attributes(card);
+
+	i = attributes;
+	while (i != NULL)
+	{
+		GList *next = i->next;
+		EVCardAttribute *attribute = i->data;
+		const gchar *type = e_vcard_attribute_get_name(attribute);
+
+		if (!!strcmp(EVC_EMAIL, type))
+		{
+			attribute = NULL;
+			/* g_free(i->data);  segfaults, meh */
+			attributes = g_list_delete_link(attributes, i);
+		}
+		i = next;
+	}
+
+	attributes = g_list_sort(attributes, cmp_attr_pref);
+
+	i = attributes;
+	while (i != NULL)
+	{
+		GList *next = i->next;
+		EVCardAttribute *attribute = i->data;
+		emit_email_name(e_vcard_attribute_get_value(attribute), name);
+		i = next;
+	}
 }
 
 static gboolean isdir(const gchar *path)

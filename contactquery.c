@@ -37,13 +37,35 @@ static gboolean match_contact(EVCard *card, const gchar *query)
 	if (NULL == email || strlen(email) == 0)
 		return FALSE;
 	else
-
 		return !!strcasestr(name, query);
 }
 
-static void emit_email_name(const gchar *email, const gchar *name)
+static void emit_email(const gchar *email, const gchar *name, const gchar* tags)
 {
-	printf("%s\t%s\n", email, name);
+	if (NULL == tags)
+		printf("%s\t%s\n", email, name);
+	else
+		printf("%s\t%s\t%s\n", email, name, tags);
+}
+
+static const gchar *attr_type(EVCardAttribute *attr) {
+	GList *params, *i;
+
+	params = e_vcard_attribute_get_param(attr, EVC_TYPE);
+
+	i = params;
+	while (i != NULL)
+	{
+		GList *next = i->next;
+		const gchar *param = i->data;
+
+		if (NULL != param)
+			return param;
+
+		i = next;
+	}
+
+	return NULL;
 }
 
 static gint attr_pref(EVCardAttribute *attr) {
@@ -112,7 +134,9 @@ static void emit_contact(EVCard *card)
 	{
 		GList *next = i->next;
 		EVCardAttribute *attribute = i->data;
-		emit_email_name(e_vcard_attribute_get_value(attribute), name);
+		const gchar *type = attr_type(attribute);
+		const gchar *tag = g_ascii_strdown(type, -1);
+		emit_email(e_vcard_attribute_get_value(attribute), name, tag);
 		i = next;
 	}
 }

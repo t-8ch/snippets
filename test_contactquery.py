@@ -11,19 +11,19 @@ here = py.path.local(__file__).dirpath()
 
 FOO = ('BEGIN:VCARD\n'
        'VERSION:3.0\n'
-       'EMAIL;TYPE=INTERNET:foo@example.com\n'
+       'EMAIL:foo@example.com\n'
        'FN:Foo\n'
        'END:VCARD')
 
 BAR = ('BEGIN:VCARD\n'
        'VERSION:3.0\n'
-       'EMAIL;TYPE=INTERNET:bar@example.com\n'
+       'EMAIL:bar@example.com\n'
        'FN:Bar\n'
        'END:VCARD')
 
 BAZ = ('BEGIN:VCARD\n'
        'VERSION:3.0\n'
-       'EMAIL;TYPE=INTERNET:baz@example.com\n'
+       'EMAIL:baz@example.com\n'
        'EMAIL:baz@example.org\n'
        'FN:Baz\n'
        'END:VCARD')
@@ -141,4 +141,18 @@ def test_mail_preference_parameter(contactquery):
         ('quux+1@example.com', 'Quux'),
         ('quux+15@example.com', 'Quux'),
         ('quux+100@example.com', 'Quux'),
+    ]
+
+
+WITH_TYPES = ('BEGIN:VCARD\n'
+              'VERSION:3.0\n'
+              'EMAIL;TYPE=INTERNET:bar@example.com\n'
+              'FN:Bar\n'
+              'END:VCARD')
+
+
+def test_mail_type_parameter(contactquery):
+    contactquery.add_contact(WITH_TYPES)
+    assert contactquery.search('') == [
+        ('bar@example.com', 'Bar', 'internet'),
     ]

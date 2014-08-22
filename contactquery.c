@@ -45,8 +45,8 @@ static void emit_email_name(const gchar *email, const gchar *name)
 	printf("%s\t%s\n", email, name);
 }
 
-static void emit_emails(gpointer data, gpointer user_data) {
-
+static void emit_emails(gpointer data, gpointer user_data)
+{
 	const gchar *search_name, *attr_type, *email;
 	EVCardAttribute *attribute;
 

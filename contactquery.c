@@ -36,6 +36,7 @@ static gboolean match_contact(EVCard *card, const gchar *query)
 	if (NULL == email || strlen(email) == 0)
 		return FALSE;
 	else
+
 		return !!strcasestr(name, query);
 }
 
@@ -44,17 +45,33 @@ static void emit_email_name(const gchar *email, const gchar *name)
 	printf("%s\t%s\n", email, name);
 }
 
+static void emit_emails(gpointer data, gpointer user_data) {
+
+	const gchar *search_name, *attr_type, *email;
+	EVCardAttribute *attribute;
+
+	search_name = (gchar *) user_data;
+	attribute = (EVCardAttribute *) data;
+
+	attr_type = e_vcard_attribute_get_name(attribute);
+
+	if (!!strcmp(EVC_EMAIL, attr_type))
+		return;
+
+	email = e_vcard_attribute_get_value(attribute);
+
+	if (NULL == email)
+		return;
+
+	emit_email_name(email, search_name);
+}
+
 static void emit_contact(EVCard *card)
 {
-	const gchar *name, *email;
+	const gchar *name;
 
 	name = get_attr(card, EVC_FN);
-	/* FIXME multiple addresses?
-	 *  currently horde can't handle this
-	 */
-	email = get_attr(card, EVC_EMAIL);
-	emit_email_name(email, name);
-
+	g_list_foreach(e_vcard_get_attributes(card), emit_emails, (gpointer) name);
 }
 
 static gboolean isdir(const gchar *path)

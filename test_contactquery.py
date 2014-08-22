@@ -21,6 +21,13 @@ BAR = ('BEGIN:VCARD\n'
        'FN:Bar\n'
        'END:VCARD')
 
+BAZ = ('BEGIN:VCARD\n'
+       'VERSION:3.0\n'
+       'EMAIL;TYPE=INTERNET:baz@example.com\n'
+       'EMAIL:baz@example.org\n'
+       'FN:Baz\n'
+       'END:VCARD')
+
 
 class ContactQuery(object):
     def __init__(self):
@@ -44,7 +51,6 @@ class ContactQuery(object):
         popen = subprocess.Popen([self.executable, str(self.tmpdir), query],
                                  stdout=subprocess.PIPE)
         lines = popen.stdout.readlines()
-        print(lines)
         assert lines[0] == b'Searching...\n'
         return [self._parse_line(line) for line in lines[1:]]
 
@@ -111,3 +117,11 @@ def test_broken_files(contactquery):
 
     contactquery.add_contact(FOO)
     assert contactquery.search('') == [('foo@example.com', 'Foo')]
+
+
+def test_multiple_email_addresses(contactquery):
+    contactquery.add_contact(BAZ)
+    assert sorted(contactquery.search('')) == [
+        ('baz@example.com', 'Baz'),
+        ('baz@example.org', 'Baz'),
+    ]

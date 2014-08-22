@@ -99,6 +99,10 @@ def test_basic(contactquery):
         ('foo@example.com', 'Foo'),
     ]
 
+    assert sorted(contactquery.search('bar')) == [
+        ('bar@example.com', 'Bar'),
+    ]
+
 
 def test_broken_files(contactquery):
     contactquery.add_contact('''some crap''')

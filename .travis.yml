@@ -1,0 +1,3 @@
+before_install: sudo apt-get update
+install: sudo apt-get install evolution-data-server-dev
+script: make check

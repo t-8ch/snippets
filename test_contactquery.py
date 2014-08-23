@@ -1,3 +1,7 @@
+from __future__ import unicode_literals
+
+import copy
+import io
 import os
 import subprocess
 import tempfile
@@ -44,7 +48,7 @@ class ContactQuery(object):
 
     def add_contact(self, contents):
         handle, name = tempfile.mkstemp(dir=str(self.tmpdir), suffix='.vcf')
-        with open(handle, 'w') as f:
+        with io.open(handle, 'w') as f:
             f.write(contents)
 
     def cleanup(self):
@@ -53,22 +57,21 @@ class ContactQuery(object):
             self.tmpdir.remove()
 
     def _parse_line(self, line):
-        return tuple(line.decode('utf-8').rstrip().split('\t', 2))
+        return tuple(line.decode('utf-8').split('\t', 2))
 
     def search(self, query):
-        popen = subprocess.Popen([self.executable, str(self.tmpdir), query],
-                                 stdout=subprocess.PIPE)
-        lines = popen.stdout.readlines()
-        assert lines[0] == b'Searching...\n'
+        output = self.check_output([str(self.tmpdir), query])
+        lines = output.splitlines()
+        assert lines[0] == b'Searching...'
         return [self._parse_line(line) for line in lines[1:]]
 
     def check_call(self, args):
-        args = args.copy()
+        args = copy.copy(args)
         args.insert(0, self.executable)
         return subprocess.check_call(args)
 
     def check_output(self, args):
-        args = args.copy()
+        args = copy.copy(args)
         args.insert(0, self.executable)
         return subprocess.check_output(args)
 

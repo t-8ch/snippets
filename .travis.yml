@@ -1,3 +1,3 @@
 before_install: sudo apt-get update
-install: sudo apt-get install evolution-data-server-dev
+install: sudo apt-get install libebook-contacts1.2-dev
 script: make check

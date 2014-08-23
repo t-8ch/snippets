@@ -1,6 +1,7 @@
 #define _GNU_SOURCE
 
 #include <string.h>
+#include <glib/gprintf.h>
 #include <libebook-contacts/libebook-contacts.h>
 
 static const gchar *FILE_EXTENSION = ".vcf";
@@ -9,7 +10,7 @@ static const gchar *EVC_PREF = "PREF";
 
 static void emit_header(void)
 {
-	printf("Searching...\n");
+	g_printf("Searching...\n");
 }
 
 static gboolean valid_filename(const gchar *filename)
@@ -44,9 +45,9 @@ static gboolean match_contact(EVCard *card, const gchar *query)
 static void emit_email(const gchar *email, const gchar *name, const gchar* tags)
 {
 	if (NULL == tags)
-		printf("%s\t%s\n", email, name);
+		g_printf("%s\t%s\n", email, name);
 	else
-		printf("%s\t%s\t%s\n", email, name, tags);
+		g_printf("%s\t%s\t%s\n", email, name, tags);
 }
 
 static const gchar *attr_type(EVCardAttribute *attr) {
@@ -170,7 +171,7 @@ static gboolean handle_file(const gchar *file, const gchar *query)
 int main(int argc, char **argv)
 {
 	if (argc != 3) {
-		fprintf(stderr, "Need exactly 2 arguments\n");
+		g_fprintf(stderr, "Need exactly 2 arguments\n");
 		return 2;
 	}
 
@@ -183,7 +184,7 @@ int main(int argc, char **argv)
 	basedir = g_dir_open(dirname, 0, NULL);
 
 	if (NULL == basedir) {
-		fprintf(stderr, "Invalid directory\n");
+		g_fprintf(stderr, "Invalid directory\n");
 		return 3;
 	}
 
@@ -197,7 +198,7 @@ int main(int argc, char **argv)
 		complete_path = g_build_filename(dirname, filename, NULL);
 
 		if (!handle_file(complete_path, query)) {
-			fprintf(stderr, "Error reading %s, aborting\n",
+			g_fprintf(stderr, "Error reading %s, aborting\n",
 					filename);
 			return 5;
 		}

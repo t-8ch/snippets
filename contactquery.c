@@ -1,8 +1,15 @@
 #define _GNU_SOURCE
 
 #include <string.h>
+#include <stdlib.h>
 #include <glib/gprintf.h>
-#include <libebook-contacts/libebook-contacts.h>
+
+#if HAVE_MODERN_EBOOK
+	#include <libebook-contacts/libebook-contacts.h>
+#else
+	#include <libebook/e-vcard.h>
+#endif
+
 
 static const gchar *FILE_EXTENSION = ".vcf";
 static const gint VCARD_DEFAULT_PREF = 100;

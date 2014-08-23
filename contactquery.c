@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <glib/gprintf.h>
 
-#if HAVE_MODERN_EBOOK
+#if MODERN_PLATFORM
 	#include <libebook-contacts/libebook-contacts.h>
 #else
 	#include <libebook/e-vcard.h>
@@ -191,6 +191,11 @@ int main(int argc, char **argv)
 
 	dirname = argv[1];
 	query = argv[2];
+
+#if MODERN_PLATFORM
+#else
+	g_type_init();
+#endif
 
 	basedir = g_dir_open(dirname, 0, NULL);
 

@@ -42,19 +42,14 @@ QUUX = ('BEGIN:VCARD\n'
 
 
 class ContactQuery(object):
-    def __init__(self):
-        self.tmpdir = py.path.local(tempfile.mkdtemp())
+    def __init__(self, tmpdir):
+        self.tmpdir = tmpdir
         self.executable = str(here / 'contactquery')
 
     def add_contact(self, contents):
         handle, name = tempfile.mkstemp(dir=str(self.tmpdir), suffix='.vcf')
         with io.open(handle, 'w') as f:
             f.write(contents)
-
-    def cleanup(self):
-        return
-        if self.tmpdir:
-            self.tmpdir.remove()
 
     def _parse_line(self, line):
         return tuple(line.decode('utf-8').split('\t', 2))
@@ -80,10 +75,8 @@ class ContactQuery(object):
 
 
 @pytest.fixture(scope='function')
-def contactquery(request):
-    cq = ContactQuery()
-    request.addfinalizer(cq.cleanup)
-    return cq
+def contactquery(request, tmpdir):
+    return ContactQuery(tmpdir)
 
 
 def test_without_dir(contactquery):

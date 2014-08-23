@@ -1,4 +1,4 @@
-Build status: [![Build Status](https://travis-ci.org/t-8ch/snippets.svg?branch=master)](https://travis-ci.org/t-8ch/snippets)
+[![Build Status](https://travis-ci.org/t-8ch/snippets.svg?branch=master)](https://travis-ci.org/t-8ch/snippets)
 
 # Contents
 

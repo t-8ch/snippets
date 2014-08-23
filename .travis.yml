@@ -1,3 +1,7 @@
+language: c
 before_install: sudo apt-get update
-install: sudo apt-get install libebook-contacts1.2-dev
+install:
+  - sudo apt-get install libebook-contacts1.2-dev
+  - sudo apt-get install python-pip
+  - sudo pip install pytest
 script: make check

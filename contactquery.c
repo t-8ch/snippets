@@ -81,7 +81,7 @@ static gint attr_pref(EVCardAttribute *attr) {
 		GList *next = i->next;
 		gchar *param = i->data;
 		gchar *endptr = NULL;
-		long int pref = strtol(param, &endptr, 10);
+		gint64 pref = g_ascii_strtoll(param, &endptr, 10);
 
 		if (NULL != param && 0 == *endptr) /* everything valid */
 			return pref;

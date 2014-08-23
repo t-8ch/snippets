@@ -137,7 +137,11 @@ static void emit_contact(EVCard *card)
 		GList *next = i->next;
 		EVCardAttribute *attribute = i->data;
 		const gchar *type = attr_type(attribute);
-		const gchar *tag = g_ascii_strdown(type, -1);
+		const gchar *tag;
+		if (NULL != type)
+			tag = g_ascii_strdown(type, -1);
+		else
+			tag = NULL;
 		emit_email(e_vcard_attribute_get_value(attribute), name, tag);
 		i = next;
 	}

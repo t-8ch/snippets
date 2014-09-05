@@ -142,7 +142,7 @@ def test_mail_preference_parameter(contactquery):
 
 WITH_TYPES = ('BEGIN:VCARD\n'
               'VERSION:3.0\n'
-              'EMAIL;TYPE=INTERNET:bar@example.com\n'
+              'EMAIL;TYPE=SOMETYPE:bar@example.com\n'
               'FN:Bar\n'
               'END:VCARD')
 
@@ -150,5 +150,18 @@ WITH_TYPES = ('BEGIN:VCARD\n'
 def test_mail_type_parameter(contactquery):
     contactquery.add_contact(WITH_TYPES)
     assert contactquery.search('') == [
-        ('bar@example.com', 'Bar', 'internet'),
+        ('bar@example.com', 'Bar', 'sometype'),
+    ]
+
+
+def test_mail_type_internet_parameter(contactquery):
+    contactquery.add_contact(
+        'BEGIN:VCARD\n'
+        'VERSION:3.0\n'
+        'EMAIL;TYPE=INTERNET:bar@example.com\n'
+        'FN:Bar\n'
+        'END:VCARD'
+    )
+    assert contactquery.search('') == [
+        ('bar@example.com', 'Bar'),
     ]

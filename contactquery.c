@@ -192,8 +192,7 @@ int main(int argc, char **argv)
 	dirname = argv[1];
 	query = argv[2];
 
-#if MODERN_PLATFORM
-#else
+#ifndef GLIB_VERSION_2_36
 	g_type_init();
 #endif
 

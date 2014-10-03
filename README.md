@@ -15,3 +15,7 @@ and the `query_command` functionality of mutt
 ### Dependencies
 
 * evolution-data-server
+
+# License
+
+MIT

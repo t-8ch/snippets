@@ -16,6 +16,10 @@ and the `query_command` functionality of mutt
 
 * evolution-data-server
 
+## pandoc-mailcap
+
+Html dumper for mailcap, for use with mutt
+
 # License
 
 MIT

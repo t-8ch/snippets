@@ -1,0 +1,11 @@
+name:                pandoc-mailcap
+version:             0.1.0.0
+build-type:          Simple
+cabal-version:       >= 1.8
+
+executable pandoc-mailcap
+  main-is:             PandocMailcap.hs
+  build-depends:       base == 4.*
+                     , encoding == 0.7.*
+                     , bytestring == 0.10.*
+                     , pandoc == 1.13.*

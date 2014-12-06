@@ -4,7 +4,7 @@ import Prelude hiding (readFile)
 
 import Data.ByteString.Lazy (readFile)
 import Data.Encoding (encodingFromString, decodeLazyByteString, DynEncoding)
-import Text.Pandoc (writePlain, readHtml, def)
+import Text.Pandoc (writePlain, readHtml, def, pandocVersion)
 import System.Environment (getArgs, getProgName)
 import System.Exit (exitFailure, exitSuccess)
 
@@ -24,7 +24,7 @@ convert = writePlain def . readHtml def
 printHelp :: IO ()
 printHelp = do
     p <- getProgName
-    putStrLn $ "Usage: " ++ p ++ " FILE [ENCODING]"
+    putStrLn $ "Usage: " ++ p ++ " FILE [ENCODING] \nPandoc version: " ++ pandocVersion
 
 main :: IO ()
 main = do

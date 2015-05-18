@@ -43,7 +43,7 @@ static gboolean match_contact(EVCard *card, const gchar *query)
 	name = get_attr(card, EVC_FN);
 	email = get_attr(card, EVC_EMAIL);
 
-	if (NULL == email || strlen(email) == 0)
+	if (NULL == attr_value || 0 == strlen(attr_value))
 		return FALSE;
 	else
 		return !!strcasestr(name, query);
@@ -63,7 +63,7 @@ static const gchar *attr_type(EVCardAttribute *attr) {
 	params = e_vcard_attribute_get_param(attr, EVC_TYPE);
 
 	i = params;
-	while (i != NULL)
+	while (NULL != i)
 	{
 		GList *next = i->next;
 		const gchar *param = i->data;
@@ -121,7 +121,7 @@ static void emit_contact(EVCard *card)
 	attributes = e_vcard_get_attributes(card);
 
 	i = attributes;
-	while (i != NULL)
+	while (NULL != i)
 	{
 		GList *next = i->next;
 		EVCardAttribute *attribute = i->data;
@@ -139,7 +139,7 @@ static void emit_contact(EVCard *card)
 	attributes = g_list_sort(attributes, cmp_attr_pref);
 
 	i = attributes;
-	while (i != NULL)
+	while (NULL != i)
 	{
 		GList *next = i->next;
 		EVCardAttribute *attribute = i->data;
@@ -181,7 +181,7 @@ static gboolean handle_file(const gchar *file, const gchar *query)
 
 int main(int argc, char **argv)
 {
-	if (argc != 3) {
+	if (3 != argc) {
 		g_fprintf(stderr, "Need exactly 2 arguments\n");
 		return 2;
 	}

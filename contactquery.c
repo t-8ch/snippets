@@ -12,7 +12,7 @@
 
 
 static const gchar *FILE_EXTENSION = ".vcf";
-static const gint VCARD_DEFAULT_PREF = 100;
+static const gchar VCARD_DEFAULT_PREF = 100;
 static const gchar *EVC_PREF = "PREF";
 
 static void emit_header(void)

@@ -20,7 +20,7 @@ static void emit_header(void)
 	g_printf("Searching...\n");
 }
 
-static gboolean valid_filename(const gchar *filename)
+static gboolean valid_filename(const gchar *const filename)
 {
 	return g_str_has_suffix(filename, FILE_EXTENSION);
 }
@@ -36,12 +36,13 @@ static const gchar *get_attr(EVCard *card, const gchar *name)
 		return  e_vcard_attribute_get_value(attr);
 }
 
-static gboolean match_contact(EVCard *card, const gchar *query)
+static gboolean match_contact(EVCard *card, const gchar *query,
+		              const gchar* attr)
 {
-	const gchar *name, *email;
+	const gchar *name, *attr_value;
 
 	name = get_attr(card, EVC_FN);
-	email = get_attr(card, EVC_EMAIL);
+	attr_value = get_attr(card, attr);
 
 	if (NULL == attr_value || 0 == strlen(attr_value))
 		return FALSE;
@@ -171,7 +172,7 @@ static gboolean handle_file(const gchar *file, const gchar *query)
 
 		card = e_vcard_new_from_string(contents);
 
-		if (match_contact(card, query))
+		if (match_contact(card, query, EVC_EMAIL))
 			emit_contact(card);
 
 	}

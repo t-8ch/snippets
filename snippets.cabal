@@ -1,4 +1,4 @@
-name:                pandoc-mailcap
+name:                snippets
 version:             0.1.0.0
 build-type:          Simple
 cabal-version:       >= 1.8
@@ -6,7 +6,13 @@ cabal-version:       >= 1.8
 Executable pandoc-mailcap
   main-is:             PandocMailcap.hs
   build-depends:       base == 4.*
-                     , encoding == 0.7.*
+                     , encoding == 0.8.*
                      , bytestring == 0.10.*
                      , pandoc == 1.13.*
   Ghc-Options:   -rtsopts -with-rtsopts=-K128m -with-rtsopts=-M128m
+
+Executable ics-validator
+  main-is:             ICSValidator.hs
+  build-depends:       base == 4.*
+                     , data-default == 0.5.*
+                     , iCalendar == 0.4.*

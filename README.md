@@ -6,7 +6,7 @@
 
 Find matching contacts from a directory of VCards.
 Useful for usage with [vdirsyncer](https://github.com/untitaker/vdirsyncer/)
-and the `query_command` functionality of mutt
+and the `query_command` functionality of mutt.
 
 ### Files
 
@@ -18,7 +18,11 @@ and the `query_command` functionality of mutt
 
 ## pandoc-mailcap
 
-Html dumper for mailcap, for use with mutt
+Html dumper for mailcap, for use with mutt.
+
+## vodafone-de-traffic.py
+
+Shows the traffic used on your Vodafone DE mobile plan while using it.
 
 # License
 

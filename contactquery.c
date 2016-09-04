@@ -39,15 +39,14 @@ static const gchar *get_attr(EVCard *card, const gchar *name)
 static gboolean match_contact(EVCard *card, const gchar *query,
 		              const gchar* attr)
 {
-	const gchar *name, *attr_value;
+	const gchar *attr_value;
 
-	name = get_attr(card, EVC_FN);
 	attr_value = get_attr(card, attr);
 
-	if (NULL == attr_value || 0 == strlen(attr_value))
+	if (NULL == attr_value)
 		return FALSE;
 	else
-		return !!strcasestr(name, query);
+		return !!strcasestr(attr_value, query);
 }
 
 static void emit_email(const gchar *email, const gchar *name, const gchar* tags)
@@ -172,7 +171,7 @@ static gboolean handle_file(const gchar *file, const gchar *query)
 
 		card = e_vcard_new_from_string(contents);
 
-		if (match_contact(card, query, EVC_EMAIL))
+		if (match_contact(card, query, EVC_FN))
 			emit_contact(card);
 
 	}

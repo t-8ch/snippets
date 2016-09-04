@@ -165,3 +165,25 @@ def test_mail_type_internet_parameter(contactquery):
     assert contactquery.search('') == [
         ('bar@example.com', 'Bar'),
     ]
+
+def test_search_by_email_component(contactquery):
+    contactquery.add_contact(
+        'BEGIN:VCARD\n'
+        'VERSION:3.0\n'
+        'EMAIL;TYPE=INTERNET:bar@example.com\n'
+        'FN:Foo\n'
+        'END:VCARD'
+    )
+    contactquery.add_contact(
+        'BEGIN:VCARD\n'
+        'VERSION:3.0\n'
+        'EMAIL;TYPE=INTERNET:baz@example.com\n'
+        'FN:Baz\n'
+        'END:VCARD'
+    )
+    assert contactquery.search('foo') == [
+        ('bar@example.com', 'Foo'),
+    ]
+    assert contactquery.search('bar') == [
+        ('bar@example.com', 'Foo'),
+    ]

@@ -10,10 +10,16 @@
 	#include <libebook/e-vcard.h>
 #endif
 
+#define ARRAY_SIZE(x) (sizeof(x)/sizeof(x[0]))
 
 static const gchar *FILE_EXTENSION = ".vcf";
 static const gchar VCARD_DEFAULT_PREF = 100;
 static const gchar *EVC_PREF = "PREF";
+
+static const gchar const * MATCH_FIELDS[] = {
+	EVC_EMAIL,
+	EVC_FN,
+};
 
 static void emit_header(void)
 {
@@ -171,9 +177,12 @@ static gboolean handle_file(const gchar *file, const gchar *query)
 
 		card = e_vcard_new_from_string(contents);
 
-		if (match_contact(card, query, EVC_FN))
-			emit_contact(card);
-
+		for (int i = 0; i < ARRAY_SIZE(MATCH_FIELDS); i++) {
+			if (match_contact(card, query, MATCH_FIELDS[i])) {
+				emit_contact(card);
+				break;
+			}
+		}
 	}
 
 	return TRUE;
